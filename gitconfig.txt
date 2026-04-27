@@ -1,0 +1,10 @@
+git config --global user.name luisgdev303
+git config --global user.email luisg.dev.lu@gmail.com
+
+npx create-expo-app@latest GalloShoppingList --template blank
+
+cd GalloShoppingList
+
+npx expo install expo-router react-native-safe-area-context react-native-screens expo-linking expo-constants expo-status-bar
+
+npx expo start --tunnel --android
