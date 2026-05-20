@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useState, useEffect} from 'react'
 import {
      Alert,
+     FlatList,
      ImageBackground,
      StyleSheet,
      Text,
@@ -9,12 +10,29 @@ import {
      View 
 } from 'react-native';
 import { Ionicons } from '@expo/vector-ions';
+import ItemList from '../components/ItemList';
 
 export default function Home() {
-  
+   const [textInput, setTextInput] = useState('');
+   const [ items, setItems ] = useState([]);
+
    function addProduto() {
-    Alert.alert("Adicionar Produto");
-   } 
+    // console.log(textInput);
+    if (textInput == '') {
+      Alert.alert(
+        'Ocorreu um problema :(',
+        'Por favor, informe o nome do produto'
+      );
+      return;
+    } 
+    const newItem = {
+      id: Date.now().toString(),
+      name: textInput,
+      bought: false
+    };
+    setItems([...items, newItem]);
+    setTextInput(''); 
+  }
 
   return (
     <View style={{ flex: 1, backgroundColor: '#000'}}>
@@ -29,6 +47,14 @@ export default function Home() {
         </View>
 
         {/* Lista de Produtos */}
+        <FlatList
+        contentContainerStyle={{ padding: 20, color: '#fff'}}
+        data={items}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={({ item }) =>
+          <ItemList item={item} />
+        }
+        />
 
         <View style={styles.footer}>
           <View style={styles.inputContainer}>
@@ -37,9 +63,11 @@ export default function Home() {
               fontsize={18}
               placeholder='Digite o nome do produto...'
               placeholderTextColor="#aeaeae"
+              value= {textInput}
+              onChangeText={(text) => setTextInput(text)}
             />
           </View>
-          <TouchableOpacity style={styles.iconContainer}>
+          <TouchableOpacity style={styles.iconContainer} onPress={addProduto}>
             <Ionicons name="add" size={36} color="#fff" />
           </TouchableOpacity>
         </View>
